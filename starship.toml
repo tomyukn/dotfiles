@@ -1,0 +1,42 @@
+add_newline = false
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$docker_context\
+$conda\
+$aws\
+$gcloud\
+$env_var\
+$cmd_duration\
+$custom\
+$time\
+$line_break\
+$jobs\
+$battery\
+$status\
+$character"""
+
+[conda]
+ignore_base = false
+
+[directory]
+truncation_length = 20
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = ""
+
+[hostname]
+format = "@[$hostname]($style) "
+
+[username]
+format = "[$user]($style)"
+
+[time]
+disabled = false
+

@@ -1,0 +1,1 @@
+alias lt='ll -rt'
