@@ -1,11 +1,9 @@
 add_newline = false
+
 format = """
-$username\
-$hostname\
+[$username@$hostname](green) \
 $directory\
 $git_branch\
-$git_commit\
-$git_state\
 $git_status\
 $docker_context\
 $conda\
@@ -14,11 +12,11 @@ $gcloud\
 $env_var\
 $cmd_duration\
 $custom\
-$time\
 $line_break\
 $jobs\
 $battery\
 $status\
+$time\
 $character"""
 
 [conda]
@@ -31,12 +29,17 @@ truncation_symbol = "…/"
 [git_branch]
 symbol = ""
 
-[hostname]
-format = "@[$hostname]($style) "
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
 
-[username]
-format = "[$user]($style)"
+[hostname]
+ssh_only = false
+format = "[$hostname](green)"
 
 [time]
+format = "[$time]($style) "
 disabled = false
 
+[username]
+format = "[$user](green)"
+show_always = true
