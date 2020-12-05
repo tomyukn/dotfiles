@@ -20,7 +20,7 @@ if [ ! -d "${HOME}/.vim" ]; then
   mkdir  ${HOME}/.vim
 fi
 
-
+# link dotfiles
 ln -snfv ${PWD}/.bash_aliases ~/
 ln -snfv ${PWD}/.Renviron ~/
 ln -snfv ${PWD}/.Rprofile ~/
