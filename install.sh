@@ -24,5 +24,4 @@ fi
 ln -snfv ${PWD}/.bash_aliases ~/
 ln -snfv ${PWD}/.Renviron ~/
 ln -snfv ${PWD}/.Rprofile ~/
-ln -snfv ${PWD}/starship.toml ~/.config/
 ln -snfv ${PWD}/.vimrc ~/.vim/vimrc
