@@ -25,12 +25,6 @@ if [ ! -f "${HOME}/bin/starship" ]; then
   curl -fsSL https://starship.rs/install.sh | bash -s -- -f -b ${HOME}/bin
 fi
 
-# vim-plug
-if [ ! -f "${HOME}/.vim/autoload/plug.vim" ];then
-  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-fi
-
 
 ln -snfv ${PWD}/.bash_aliases ~/
 ln -snfv ${PWD}/.Renviron ~/
