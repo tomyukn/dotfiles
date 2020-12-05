@@ -20,11 +20,6 @@ if [ ! -d "${HOME}/.vim" ]; then
   mkdir  ${HOME}/.vim
 fi
 
-# starship
-if [ ! -f "${HOME}/bin/starship" ]; then
-  curl -fsSL https://starship.rs/install.sh | bash -s -- -f -b ${HOME}/bin
-fi
-
 
 ln -snfv ${PWD}/.bash_aliases ~/
 ln -snfv ${PWD}/.Renviron ~/
