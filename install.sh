@@ -14,5 +14,4 @@ fi
 ln -snfv ${PWD}/.bash_aliases ~/
 ln -snfv ${PWD}/.gitconfig ~/
 ln -snfv ${PWD}/.Renviron ~/
-ln -snfv ${PWD}/.Rprofile ~/
-ln -snfv ${PWD}/.vimrc ~/.vim/vimrc
+# ln -snfv ${PWD}/.vimrc ~/.vim/vimrc
