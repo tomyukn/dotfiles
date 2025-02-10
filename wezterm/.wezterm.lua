@@ -3,7 +3,7 @@ local act = wezterm.action
 
 local config = wezterm.config_builder()
 
-config.default_domain = 'WSL:Ubuntu'
+config.default_domain = 'WSL:ArchLinux'
 -- config.default_prog = { 'C:\\Program Files\\Git\\bin\\bash.exe' }
 config.color_scheme = 'iceberg-dark'
 
@@ -26,12 +26,13 @@ wezterm.on('format-window-title', function(tab, pane, tabs, panes, config)
   if #tabs > 1 then
     index = string.format('[%d/%d] ', tab.tab_index + 1, #tabs)
   end
-  return index .. 'Terminal'
+  return index .. activate_pane.title
 end)
 
 -- tab bar
-config.use_fancy_tab_bar = true
-config.tab_bar_at_bottom = false
+config.use_fancy_tab_bar = false
+config.tab_bar_at_bottom = true
+config.tab_max_width = 50
 
 -- show which key table is active in the status area
 wezterm.on('update-right-status', function(window, pane)
