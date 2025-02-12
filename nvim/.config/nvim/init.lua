@@ -61,10 +61,12 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   -- color scheme
   {
-    'cocopon/iceberg.vim',
+    'folke/tokyonight.nvim',
     lazy = false,
+    priority = 1000,
+    opts = {},
     config = function()
-      vim.cmd([[colorscheme iceberg]])
+      vim.cmd([[colorscheme tokyonight]])
     end,
   },
 
@@ -75,7 +77,7 @@ require("lazy").setup({
     config = function()
       vim.o.showmode = false
       vim.g.lightline = {
-        colorscheme = 'iceberg',
+        colorscheme = 'tokyonight',
         active = {
           left = {
             { 'mode', 'paste' },

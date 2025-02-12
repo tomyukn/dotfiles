@@ -5,7 +5,7 @@ local config = wezterm.config_builder()
 
 config.default_domain = 'WSL:ArchLinux'
 -- config.default_prog = { 'C:\\Program Files\\Git\\bin\\bash.exe' }
-config.color_scheme = 'iceberg-dark'
+config.color_scheme = 'Tokyo Night (Gogh)'
 
 -- fonts
 config.font = wezterm.font_with_fallback {
