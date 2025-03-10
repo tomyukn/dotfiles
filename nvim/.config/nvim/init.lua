@@ -29,9 +29,12 @@ vim.opt.swapfile = false
 vim.keymap.set('n', '<ESC><ESC>', ':nohlsearch<CR>', { silent = true })
 vim.keymap.set('n', 'j', 'gj')
 vim.keymap.set('n', 'k', 'gk')
-vim.keymap.set('', '<F1>', '<Esc>')
-vim.keymap.set('i', '<F1>', '<Esc>')
-vim.keymap.set('', '<leader>n', ':NvimTreeToggle<CR>')
+vim.keymap.set('n', '<leader>n', ':NvimTreeToggle<CR>', { desc = 'Toggle NvimTree'})
+
+vim.keymap.set('i', '(', '()<Left>')
+vim.keymap.set('i', '[', '[]<Left>')
+vim.keymap.set('i', '{', '{}<Left>')
+vim.keymap.set('i', '<', '<><Left>')
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -70,27 +73,35 @@ require("lazy").setup({
     end,
   },
 
-  -- status line
- {
-    'itchyny/lightline.vim',
-    lazy = false,
-    config = function()
-      vim.o.showmode = false
-      vim.g.lightline = {
-        colorscheme = 'tokyonight',
-        active = {
-          left = {
-            { 'mode', 'paste' },
-            { 'readonly', 'filename', 'modified' },
-          },
-          right = {
-            { 'lineinfo' },
-            { 'percent' },
-            { 'fileformat', 'fileencoding', 'filetype' },
+  -- Which key
+  {
+    'folke/which-key.nvim',
+    event = 'VeryLazy',
+    keys = {
+      {
+        '<leader>?',
+        function()
+          require('which-key').show({ global = false })
+        end,
+        desc = 'Buffer Local Keymaps (which-key)',
       },
+    },
+  },
+
+  -- status line
+  {
+    'nvim-lualine/lualine.nvim',
+    config = function()
+      require('lualine').setup {
+        options = {
+          section_separators = '',
+          component_separators = '',
+          colored = true,
+          globalstatus = true,
         },
       }
     end,
+    dependencies = { 'nvim-tree/nvim-web-devicons' }
   },
 
   {
@@ -114,7 +125,12 @@ require("lazy").setup({
       require('leap').create_default_mappings()
     end
   },
-  
+
+  -- auto close patentheses
+  {
+    'cohama/lexima.vim'
+  },
+
   -- % motion
   {
     'andymass/vim-matchup',
@@ -122,44 +138,13 @@ require("lazy").setup({
       vim.g.matchup_matchparen_offscreen = { method = "popup" }
     end
   },
-  
+
   -- fgf
   {
     'ibhagwan/fzf-lua',
     config = function()
       vim.keymap.set('', '<C-\\>', ':FzfLua buffers<CR>')
       vim.keymap.set('', '<C-p>', ':FzfLua files<CR>')
-    end
-  },
-
-  -- LSP
-  {
-    'neovim/nvim-lspconfig',
-    config = function()
-      local lspconfig = require('lspconfig')
-      require('lspconfig.ui.windows').default_options.border = 'single'
- 
-      -- Go
-      lspconfig.gopls.setup({})
-
-      -- Rust
-      lspconfig.rust_analyzer.setup {
-        settings = {
-          ['rust-analyzer'] = {
-            imports = {
-              granularity = {
-                group = "module",
-              },
-            },
-          },
-        },
-      }
-
-      -- keymap
-      vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
-      vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float)
-      vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-      vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
     end
   },
 
@@ -193,7 +178,9 @@ require("lazy").setup({
         },
         mapping = {
           ['<C-n>'] = cmp.mapping.select_next_item(),
+          ['<Down>'] = cmp.mapping.select_next_item(),
           ['<C-p>'] = cmp.mapping.select_prev_item(),
+          ['<Up>'] = cmp.mapping.select_prev_item(),
           ['<C-b>'] = cmp.mapping.scroll_docs(-4),
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
           ['<C-e>'] = cmp.mapping.abort(),
@@ -229,7 +216,7 @@ require("lazy").setup({
             else
               fallback()
             end
-          end, { "i", "s" }), 
+          end, { "i", "s" }),
         },
         window = {
           completion = cmp.config.window.bordered(),
@@ -244,6 +231,71 @@ require("lazy").setup({
           { name = 'buffer' },
         })
       })
+
+      cmp.setup.cmdline(':', {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+          { name = 'path' }
+        }, {
+          { name = 'cmdline' }
+        }),
+        matching = { disallow_symbol_nonprefix_matching = false }
+      })
+    end
+  },
+
+  -- LSP
+  {
+    'neovim/nvim-lspconfig',
+    config = function()
+      local lspconfig = require('lspconfig')
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+      require('lspconfig.ui.windows').default_options.border = 'single'
+      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
+        vim.lsp.handlers.hover,
+        { border = 'single' }
+      )
+
+      -- Go
+      lspconfig.gopls.setup {}
+
+      -- OCaml
+      lspconfig.ocamllsp.setup {}
+
+      -- Rust
+      lspconfig.rust_analyzer.setup {
+        capabilities = capabilities,
+        settings = {
+          ['rust-analyzer'] = {
+            cargo = {
+              allFeatures = true,
+            },
+            check = {
+              command = "clippy",
+            },
+            imports = {
+              granularity = {
+                group = "module",
+              },
+            },
+          },
+        },
+      }
+
+      -- keymap
+      vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Diagnostics list' })
+      vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, { desc = 'Show Diagnostics'})
+      vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Next diagnostic' })
+      vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Previous diagnostic' })
+      vim.keymap.set('n', '<leader>f',
+        ':lua vim.lsp.buf.format()<CR>',
+        { desc = 'Format buffer' }
+      )
+      vim.keymap.set('n', '<leader>h',
+        ':lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<CR>',
+        { desc = 'Toggle Inlay hints' }
+      )
     end
   },
 
@@ -259,4 +311,3 @@ require("lazy").setup({
   -- automatically check for plugin updates
   checker = { enabled = true },
 })
-
