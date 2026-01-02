@@ -32,7 +32,7 @@ export FZF_ALT_C_OPTS="--preview 'tree -aC {} | head -50'"
 alias ls='ls --color=auto'
 alias ll='ls -la'
 alias grep='grep --color=auto'
-alias fd='fdfind'
+alias fd='fdfind --hidden --no-ignore'
 alias bat='batcat'
 
 # zplug - manage plugins
@@ -52,4 +52,4 @@ fi
 zplug load
 
 # Path
-export PATH=$HOME/bin:$PATH
+export PATH=$HOME/tools/bin:$HOME/.local/bin:$PATH
